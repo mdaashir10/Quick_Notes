@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="com.notes.servlets.AdminDashboardServlet.FileInfo" %>
+<%@ page import="com.notes.servlets.AdminDashboardServlet.FolderItem" %>
+<%@ page import="com.notes.servlets.AdminDashboardServlet.BreadcrumbItem" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <!DOCTYPE html>
@@ -27,7 +29,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
@@ -108,18 +110,47 @@
             border: 1px solid rgba(255, 107, 107, 0.3);
         }
         
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .breadcrumb a {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .breadcrumb a:hover {
+            color: #fff;
+        }
+        
+        .breadcrumb span {
+            opacity: 0.5;
+        }
+        
+        .breadcrumb .current {
+            color: #fff;
+            opacity: 0.8;
+        }
+        
         .card {
             background: rgba(255,255,255,0.08);
             border-radius: 20px;
-            padding: 35px;
+            padding: 30px;
             margin-bottom: 25px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
         }
         
         .card h2 {
-            font-size: 1.4em;
-            margin-bottom: 25px;
+            font-size: 1.3em;
+            margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid #4ecdc4;
             display: flex;
@@ -127,86 +158,171 @@
             gap: 10px;
         }
         
-        .upload-form {
+        .forms-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .form-card h3 {
+            font-size: 1.1em;
+            margin-bottom: 20px;
             display: flex;
-            gap: 15px;
-            align-items: stretch;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
         }
         
-        .file-input-wrapper {
-            flex-grow: 1;
-            min-width: 250px;
+        .form-group {
+            margin-bottom: 15px;
         }
         
-        .file-input-wrapper input[type="file"] {
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .form-group select,
+        .form-group input[type="text"] {
             width: 100%;
-            padding: 18px 20px;
+            padding: 12px 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95em;
+        }
+        
+        .form-group select option {
+            background: #302b63;
+            color: white;
+        }
+        
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 15px;
             border: 2px dashed rgba(255,255,255,0.3);
-            border-radius: 12px;
+            border-radius: 10px;
             background: rgba(255,255,255,0.05);
             cursor: pointer;
             color: white;
             font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
         }
         
-        .file-input-wrapper input[type="file"]:hover {
+        .form-group input[type="file"]:hover {
             border-color: #4ecdc4;
-            background: rgba(78, 205, 196, 0.1);
         }
         
-        .file-input-wrapper input[type="file"]::file-selector-button {
+        .form-group input[type="file"]::file-selector-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             margin-right: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .file-input-wrapper input[type="file"]::file-selector-button:hover {
-            transform: scale(1.02);
         }
         
         .btn {
-            padding: 18px 35px;
+            padding: 14px 25px;
             border: none;
-            border-radius: 12px;
-            font-size: 1em;
+            border-radius: 10px;
+            font-size: 0.95em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Poppins', sans-serif;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .btn-upload {
             background: linear-gradient(135deg, #4ecdc4, #44a08d);
             color: white;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
         .btn-upload:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(78, 205, 196, 0.3);
+        }
+        
+        .btn-create {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
         
         .btn-delete {
             background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 15px;
             font-size: 0.85em;
+            width: auto;
         }
         
         .btn-delete:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .folder-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .folder-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .folder-icon {
+            font-size: 2em;
+        }
+        
+        .folder-details h4 {
+            font-size: 0.95em;
+            margin-bottom: 3px;
+        }
+        
+        .folder-details span {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+        
+        .folder-actions {
+            margin-left: auto;
         }
         
         .files-table {
@@ -216,7 +332,7 @@
         
         .files-table th,
         .files-table td {
-            padding: 18px 15px;
+            padding: 15px;
             text-align: left;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
@@ -225,9 +341,8 @@
             background: rgba(255,255,255,0.05);
             font-weight: 600;
             color: #4ecdc4;
-            font-size: 0.9em;
+            font-size: 0.85em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         
         .files-table tbody tr {
@@ -247,7 +362,7 @@
         .file-icon {
             width: 40px;
             height: 40px;
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -262,50 +377,24 @@
         
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 50px 20px;
         }
         
         .empty-state .icon {
-            font-size: 4em;
-            margin-bottom: 20px;
+            font-size: 3.5em;
+            margin-bottom: 15px;
             opacity: 0.5;
         }
         
         .empty-state h4 {
-            font-size: 1.3em;
-            margin-bottom: 10px;
+            font-size: 1.2em;
+            margin-bottom: 8px;
             opacity: 0.8;
         }
         
         .empty-state p {
             opacity: 0.6;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .stat-card .value {
-            font-size: 2em;
-            font-weight: 700;
-            color: #4ecdc4;
-        }
-        
-        .stat-card .label {
-            font-size: 0.85em;
-            opacity: 0.7;
-            margin-top: 5px;
+            font-size: 0.95em;
         }
         
         @media (max-width: 768px) {
@@ -319,13 +408,8 @@
                 text-align: center;
             }
             
-            .upload-form {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
+            .forms-grid {
+                grid-template-columns: 1fr;
             }
             
             .files-table th:nth-child(2),
@@ -362,105 +446,182 @@
         </div>
         <%
             }
-        %>
-        
-        <%
-            List<FileInfo> noteFiles = (List<FileInfo>) request.getAttribute("noteFiles");
-            int fileCount = noteFiles != null ? noteFiles.size() : 0;
-        %>
-        
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="value"><%= fileCount %></div>
-                <div class="label">Total Files</div>
-            </div>
-            <div class="stat-card">
-                <div class="value">📚</div>
-                <div class="label">Notes Active</div>
-            </div>
-            <div class="stat-card">
-                <div class="value">✓</div>
-                <div class="label">System Online</div>
-            </div>
-        </div>
-        
-        <div class="card">
-            <h2>📤 Upload New Note</h2>
-            <form action="upload" method="post" enctype="multipart/form-data" class="upload-form">
-                <div class="file-input-wrapper">
-                    <input type="file" name="noteFile" required>
-                </div>
-                <button type="submit" class="btn btn-upload">
-                    <span>⬆</span> Upload File
-                </button>
-            </form>
-        </div>
-        
-        <div class="card">
-            <h2>📁 Manage Notes</h2>
             
-            <%
-                SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm");
+            List<FolderItem> folders = (List<FolderItem>) request.getAttribute("folders");
+            List<FileInfo> noteFiles = (List<FileInfo>) request.getAttribute("noteFiles");
+            List<FolderItem> allCategories = (List<FolderItem>) request.getAttribute("allCategories");
+            List<BreadcrumbItem> breadcrumbs = (List<BreadcrumbItem>) request.getAttribute("breadcrumbs");
+            String currentPath = (String) request.getAttribute("currentPath");
+            if (currentPath == null) currentPath = "";
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm");
+        %>
+        
+        <div class="breadcrumb">
+            📂
+            <% if (breadcrumbs != null) {
+                for (int i = 0; i < breadcrumbs.size(); i++) {
+                    BreadcrumbItem crumb = breadcrumbs.get(i);
+                    if (i == breadcrumbs.size() - 1) { %>
+                        <span class="current"><%= crumb.getName() %></span>
+                    <% } else { %>
+                        <a href="dashboard?path=<%= java.net.URLEncoder.encode(crumb.getPath(), "UTF-8") %>"><%= crumb.getName() %></a>
+                        <span>/</span>
+                    <% }
+                }
+            } %>
+        </div>
+        
+        <div class="card">
+            <h2>➕ Add Content</h2>
+            <div class="forms-grid">
+                <div class="form-card">
+                    <h3>📤 Upload File</h3>
+                    <form action="upload" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Upload to category:</label>
+                            <select name="category">
+                                <option value="<%= currentPath %>" selected>
+                                    <%= currentPath.isEmpty() ? "📁 Root folder (current)" : "📁 " + currentPath + " (current)" %>
+                                </option>
+                                <option value="">📁 Root folder</option>
+                                <% if (allCategories != null) {
+                                    for (FolderItem cat : allCategories) {
+                                        if (!cat.getPath().equals(currentPath)) { %>
+                                            <option value="<%= cat.getPath() %>">📁 <%= cat.getPath() %></option>
+                                        <% }
+                                    }
+                                } %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Select file:</label>
+                            <input type="file" name="noteFile" required>
+                        </div>
+                        <button type="submit" class="btn btn-upload">
+                            <span>⬆</span> Upload File
+                        </button>
+                    </form>
+                </div>
                 
-                if (noteFiles == null || noteFiles.isEmpty()) {
-            %>
+                <div class="form-card">
+                    <h3>📁 Create Folder</h3>
+                    <form action="createFolder" method="post">
+                        <div class="form-group">
+                            <label>Create inside:</label>
+                            <select name="parentPath">
+                                <option value="<%= currentPath %>" selected>
+                                    <%= currentPath.isEmpty() ? "📁 Root folder (current)" : "📁 " + currentPath + " (current)" %>
+                                </option>
+                                <option value="">📁 Root folder</option>
+                                <% if (allCategories != null) {
+                                    for (FolderItem cat : allCategories) {
+                                        if (!cat.getPath().equals(currentPath)) { %>
+                                            <option value="<%= cat.getPath() %>">📁 <%= cat.getPath() %></option>
+                                        <% }
+                                    }
+                                } %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Folder name:</label>
+                            <input type="text" name="folderName" placeholder="e.g., Semester 1" required>
+                        </div>
+                        <button type="submit" class="btn btn-create">
+                            <span>📁</span> Create Folder
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📂 Contents of "<%= currentPath.isEmpty() ? "Root" : currentPath %>"</h2>
+            
+            <% if ((folders == null || folders.isEmpty()) && (noteFiles == null || noteFiles.isEmpty())) { %>
                 <div class="empty-state">
                     <div class="icon">📁</div>
-                    <h4>No notes uploaded yet</h4>
-                    <p>Use the form above to upload your first study material!</p>
+                    <h4>This folder is empty</h4>
+                    <p>Upload files or create subfolders using the forms above</p>
                 </div>
-            <%
-                } else {
-            %>
-                <table class="files-table">
-                    <thead>
-                        <tr>
-                            <th>File Name</th>
-                            <th>Size</th>
-                            <th>Last Modified</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                            for (FileInfo file : noteFiles) {
-                                String iconClass = "default";
-                                String lowerName = file.getName().toLowerCase();
-                                if (lowerName.endsWith(".pdf")) {
-                                    iconClass = "pdf";
-                                } else if (lowerName.endsWith(".doc") || lowerName.endsWith(".docx")) {
-                                    iconClass = "doc";
-                                } else if (lowerName.endsWith(".ppt") || lowerName.endsWith(".pptx")) {
-                                    iconClass = "ppt";
-                                } else if (lowerName.endsWith(".xls") || lowerName.endsWith(".xlsx")) {
-                                    iconClass = "xls";
-                                }
-                        %>
-                        <tr>
-                            <td>
-                                <div class="file-name">
-                                    <div class="file-icon <%= iconClass %>">📄</div>
-                                    <span><%= file.getName() %></span>
+            <% } else { %>
+                
+                <% if (folders != null && !folders.isEmpty()) { %>
+                    <h3 style="font-size: 1em; margin-bottom: 15px; opacity: 0.8;">📁 Folders</h3>
+                    <div class="items-grid">
+                        <% for (FolderItem folder : folders) { %>
+                            <div class="folder-item">
+                                <a href="dashboard?path=<%= java.net.URLEncoder.encode(folder.getPath(), "UTF-8") %>" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; flex: 1;">
+                                    <span class="folder-icon">📁</span>
+                                    <div class="folder-details">
+                                        <h4><%= folder.getName() %></h4>
+                                        <span><%= folder.getFileCount() %> files</span>
+                                    </div>
+                                </a>
+                                <div class="folder-actions">
+                                    <form action="delete" method="post" style="display: inline;" 
+                                          onsubmit="return confirm('Delete folder &quot;<%= folder.getName() %>&quot; and ALL its contents?');">
+                                        <input type="hidden" name="filePath" value="<%= folder.getPath() %>">
+                                        <input type="hidden" name="deleteType" value="folder">
+                                        <input type="hidden" name="currentPath" value="<%= currentPath %>">
+                                        <button type="submit" class="btn btn-delete">🗑</button>
+                                    </form>
                                 </div>
-                            </td>
-                            <td><%= file.getSize() %></td>
-                            <td><%= dateFormat.format(new Date(file.getLastModified())) %></td>
-                            <td>
-                                <form action="delete" method="post" style="display: inline;" 
-                                      onsubmit="return confirm('Are you sure you want to delete this file?');">
-                                    <input type="hidden" name="fileName" value="<%= file.getName() %>">
-                                    <button type="submit" class="btn btn-delete">🗑 Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <%
-                            }
-                        %>
-                    </tbody>
-                </table>
-            <%
-                }
-            %>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } %>
+                
+                <% if (noteFiles != null && !noteFiles.isEmpty()) { %>
+                    <h3 style="font-size: 1em; margin: 25px 0 15px; opacity: 0.8;">📄 Files</h3>
+                    <table class="files-table">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Size</th>
+                                <th>Last Modified</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                for (FileInfo file : noteFiles) {
+                                    String iconClass = "default";
+                                    String lowerName = file.getName().toLowerCase();
+                                    if (lowerName.endsWith(".pdf")) {
+                                        iconClass = "pdf";
+                                    } else if (lowerName.endsWith(".doc") || lowerName.endsWith(".docx")) {
+                                        iconClass = "doc";
+                                    } else if (lowerName.endsWith(".ppt") || lowerName.endsWith(".pptx")) {
+                                        iconClass = "ppt";
+                                    } else if (lowerName.endsWith(".xls") || lowerName.endsWith(".xlsx")) {
+                                        iconClass = "xls";
+                                    }
+                            %>
+                            <tr>
+                                <td>
+                                    <div class="file-name">
+                                        <div class="file-icon <%= iconClass %>">📄</div>
+                                        <span><%= file.getName() %></span>
+                                    </div>
+                                </td>
+                                <td><%= file.getSize() %></td>
+                                <td><%= dateFormat.format(new Date(file.getLastModified())) %></td>
+                                <td>
+                                    <form action="delete" method="post" style="display: inline;" 
+                                          onsubmit="return confirm('Delete file &quot;<%= file.getName() %>&quot;?');">
+                                        <input type="hidden" name="filePath" value="<%= file.getPath() %>">
+                                        <input type="hidden" name="currentPath" value="<%= currentPath %>">
+                                        <button type="submit" class="btn btn-delete">🗑 Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <%
+                                }
+                            %>
+                        </tbody>
+                    </table>
+                <% } %>
+            <% } %>
         </div>
     </div>
 </body>

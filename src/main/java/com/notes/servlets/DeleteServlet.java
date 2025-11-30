@@ -11,92 +11,103 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * DeleteServlet - Handles file deletion for admin users.
- * 
- * This servlet deletes note files from the notes directory.
- * Only accessible by authenticated admin users.
- * 
- * @author Admin
- */
 @WebServlet("/admin/delete")
 public class DeleteServlet extends HttpServlet {
     
-    // Directory where notes are stored
     private static final String NOTES_DIR = System.getProperty("user.dir") + "/notes";
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // Get the filename to delete from the request
-        String fileName = request.getParameter("fileName");
+        String filePath = request.getParameter("filePath");
+        String deleteType = request.getParameter("deleteType");
+        String currentPath = request.getParameter("currentPath");
         
-        if (fileName == null || fileName.trim().isEmpty()) {
-            // No filename provided
+        if (currentPath == null) {
+            currentPath = "";
+        }
+        currentPath = sanitizePath(currentPath);
+        
+        if (filePath == null || filePath.trim().isEmpty()) {
             request.setAttribute("message", "Error: No file specified for deletion.");
             request.setAttribute("messageType", "error");
+            request.setAttribute("currentPath", currentPath);
             request.getRequestDispatcher("/admin/dashboard").forward(request, response);
             return;
         }
         
-        // Sanitize the filename to prevent directory traversal attacks
-        fileName = sanitizeFileName(fileName);
+        filePath = sanitizePath(filePath);
         
-        // Create path to the file
-        Path filePath = Paths.get(NOTES_DIR, fileName);
-        File fileToDelete = filePath.toFile();
+        Path targetPath = Paths.get(NOTES_DIR, filePath);
+        File fileToDelete = targetPath.toFile();
+        File notesFolder = new File(NOTES_DIR);
         
-        // Security check: ensure the file is within the notes directory
-        if (!fileToDelete.getCanonicalPath().startsWith(new File(NOTES_DIR).getCanonicalPath())) {
+        if (!fileToDelete.getCanonicalPath().startsWith(notesFolder.getCanonicalPath())) {
             request.setAttribute("message", "Error: Invalid file path.");
             request.setAttribute("messageType", "error");
+            request.setAttribute("currentPath", currentPath);
             request.getRequestDispatcher("/admin/dashboard").forward(request, response);
             return;
         }
         
-        // Check if file exists
         if (!fileToDelete.exists()) {
-            request.setAttribute("message", "Error: File '" + fileName + "' does not exist.");
+            request.setAttribute("message", "Error: File or folder does not exist.");
             request.setAttribute("messageType", "error");
+            request.setAttribute("currentPath", currentPath);
             request.getRequestDispatcher("/admin/dashboard").forward(request, response);
             return;
         }
         
-        // Check if it's actually a file (not a directory)
-        if (!fileToDelete.isFile()) {
-            request.setAttribute("message", "Error: Cannot delete directories.");
-            request.setAttribute("messageType", "error");
-            request.getRequestDispatcher("/admin/dashboard").forward(request, response);
-            return;
-        }
+        String itemName = fileToDelete.getName();
         
-        // Attempt to delete the file
         try {
-            Files.delete(filePath);
-            request.setAttribute("message", "Success: File '" + fileName + "' deleted successfully!");
+            if (fileToDelete.isDirectory()) {
+                if ("folder".equals(deleteType)) {
+                    deleteDirectory(fileToDelete);
+                    request.setAttribute("message", "Success: Folder '" + itemName + "' and all its contents deleted!");
+                } else {
+                    request.setAttribute("message", "Error: Cannot delete folder without confirmation.");
+                    request.setAttribute("messageType", "error");
+                    request.setAttribute("currentPath", currentPath);
+                    request.getRequestDispatcher("/admin/dashboard").forward(request, response);
+                    return;
+                }
+            } else {
+                Files.delete(targetPath);
+                request.setAttribute("message", "Success: File '" + itemName + "' deleted!");
+            }
             request.setAttribute("messageType", "success");
         } catch (IOException e) {
-            request.setAttribute("message", "Error: Could not delete file. " + e.getMessage());
+            request.setAttribute("message", "Error: Could not delete. " + e.getMessage());
             request.setAttribute("messageType", "error");
         }
         
-        // Forward to admin dashboard
+        request.setAttribute("currentPath", currentPath);
         request.getRequestDispatcher("/admin/dashboard").forward(request, response);
     }
     
-    /**
-     * Sanitizes the filename to prevent security issues.
-     * Removes potentially dangerous characters and path components.
-     * 
-     * @param fileName The original filename
-     * @return A sanitized, safe filename
-     */
-    private String sanitizeFileName(String fileName) {
-        // Remove any path separators to prevent directory traversal
-        fileName = fileName.replaceAll("[/\\\\]", "");
-        // Remove any null bytes
-        fileName = fileName.replace("\0", "");
-        return fileName;
+    private void deleteDirectory(File directory) throws IOException {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectory(file);
+                } else {
+                    Files.delete(file.toPath());
+                }
+            }
+        }
+        Files.delete(directory.toPath());
+    }
+    
+    private String sanitizePath(String path) {
+        path = path.replace("\\", "/");
+        path = path.replaceAll("\\.\\./", "");
+        path = path.replaceAll("\\.\\.\\\\", "");
+        path = path.replace("\0", "");
+        path = path.replaceAll("^/+", "");
+        path = path.replaceAll("/+$", "");
+        return path;
     }
 }
