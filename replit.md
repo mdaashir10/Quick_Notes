@@ -1,7 +1,13 @@
 # Student Notes Sharing Application
 
 ## Overview
-A beginner-friendly Java web application using Servlets and JSP for student notes sharing. Students can download notes publicly, while only the admin can upload or delete files. Uses Apache Tomcat as the web server with BASIC authentication for admin access.
+A beginner-friendly Java web application using Servlets and JSP for student notes sharing, styled after backbencher.club. Students can download notes publicly, while only the admin can upload or delete files. Uses Apache Tomcat as the web server with BASIC authentication for admin access.
+
+## Design
+- **Theme:** Dark gradient theme inspired by backbencher.club
+- **Typography:** Poppins font family
+- **Features:** Hero section, category cards, glassmorphism effects
+- **Colors:** Purple/teal gradient background with colorful accent cards
 
 ## Project Structure
 ```
