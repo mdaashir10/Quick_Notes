@@ -1,0 +1,32 @@
+# Java compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Build directories
+target/
+build/
+out/
+bin/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# Tomcat
+apache-tomcat-*/
+logs/
+work/
+temp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Notes directory (uploaded files)
+notes/*
+!notes/.gitkeep

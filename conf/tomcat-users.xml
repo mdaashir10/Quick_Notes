@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    tomcat-users.xml - Tomcat User Configuration
+    
+    This file defines users and roles for Tomcat authentication.
+    
+    IMPORTANT: In production, this file should be placed in:
+    - CATALINA_HOME/conf/tomcat-users.xml (for the Tomcat installation)
+    
+    This example file is included in the project for reference.
+    
+    SECURITY WARNING:
+    - Change the default password before deploying to production!
+    - Keep this file secure and do not expose it publicly.
+-->
+<tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0">
+
+    <!--
+        Role Definitions
+        ================
+        Roles are used in web.xml security constraints to define
+        who can access protected resources.
+    -->
+    
+    <!-- Admin role for managing notes (upload/delete) -->
+    <role rolename="admin"/>
+    
+    <!-- Manager role for Tomcat Manager app (optional, for deployment) -->
+    <role rolename="manager-gui"/>
+    <role rolename="manager-script"/>
+
+    <!--
+        User Definitions
+        ================
+        Each user has a username, password, and assigned roles.
+        
+        IMPORTANT: Change these passwords in production!
+    -->
+    
+    <!-- 
+        Admin User
+        ==========
+        Username: admin
+        Password: admin123 (CHANGE THIS IN PRODUCTION!)
+        Roles: admin (can upload/delete notes)
+    -->
+    <user username="admin" 
+          password="admin123" 
+          roles="admin"/>
+    
+    <!--
+        Optional: Tomcat Manager User
+        ==============================
+        This user can access the Tomcat Manager application
+        for deploying and managing web applications.
+        
+        Uncomment if needed:
+    -->
+    <!-- 
+    <user username="manager" 
+          password="manager123" 
+          roles="manager-gui,manager-script"/>
+    -->
+
+</tomcat-users>
+
+<!--
+    ================================================
+    HOW TO USE THIS FILE
+    ================================================
+    
+    1. Copy this file to your Tomcat's conf directory:
+       cp conf/tomcat-users.xml $CATALINA_HOME/conf/
+    
+    2. Restart Tomcat for changes to take effect
+    
+    3. Access the admin area at:
+       http://localhost:8080/notes/admin/dashboard
+    
+    4. Enter credentials when prompted:
+       Username: admin
+       Password: admin123
+    
+    ================================================
+    CHANGING PASSWORDS
+    ================================================
+    
+    To change the admin password:
+    1. Edit this file
+    2. Change the password attribute in the user element
+    3. Restart Tomcat
+    
+    Example:
+    <user username="admin" password="MySecurePassword123!" roles="admin"/>
+    
+    ================================================
+    PASSWORD ENCRYPTION (OPTIONAL)
+    ================================================
+    
+    For better security, you can use encrypted passwords.
+    See Tomcat documentation on "Realm Configuration" for details.
+-->

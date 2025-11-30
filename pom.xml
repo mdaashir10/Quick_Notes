@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    pom.xml - Maven Project Configuration
+    
+    This file configures:
+    1. Project dependencies (Servlet API, JSP API)
+    2. Build settings for creating a WAR file
+    3. Compiler settings for Java version
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- Project Identification -->
+    <groupId>com.notes</groupId>
+    <artifactId>student-notes</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+    
+    <name>Student Notes Sharing Application</name>
+    <description>A simple Java web application for sharing student notes</description>
+    
+    <!-- Properties -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+    
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- 
+            Servlet API
+            ===========
+            Provides HttpServlet, HttpServletRequest, HttpServletResponse, etc.
+            Scope: provided (Tomcat provides this at runtime)
+        -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- 
+            JSP API
+            =======
+            Provides JSP support
+            Scope: provided (Tomcat provides this at runtime)
+        -->
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.3</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    
+    <!-- Build Configuration -->
+    <build>
+        <!-- Final WAR file name -->
+        <finalName>notes</finalName>
+        
+        <plugins>
+            <!-- Maven WAR Plugin - Creates the WAR file -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <!-- Don't fail if web.xml is in WEB-INF -->
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            
+            <!-- Maven Compiler Plugin - Sets Java version -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    web.xml - Web Application Deployment Descriptor
+    
+    This file configures:
+    1. Welcome file (default page)
+    2. Security constraints for admin pages
+    3. BASIC authentication for protected resources
+    4. Role definitions
+-->
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <!-- Application Display Name -->
+    <display-name>Student Notes Sharing Application</display-name>
+    
+    <!-- Description -->
+    <description>
+        A simple web application for sharing student notes.
+        Students can download files publicly.
+        Admin can upload and delete files with authentication.
+    </description>
+
+    <!-- Welcome File - Default page when accessing the application -->
+    <welcome-file-list>
+        <welcome-file>list</welcome-file>
+    </welcome-file-list>
+
+    <!-- ============================================== -->
+    <!-- SECURITY CONFIGURATION                         -->
+    <!-- ============================================== -->
+
+    <!-- Security Constraint - Protect all admin URLs -->
+    <security-constraint>
+        <display-name>Admin Area Protection</display-name>
+        
+        <!-- Define the protected resources -->
+        <web-resource-collection>
+            <web-resource-name>Admin Resources</web-resource-name>
+            <description>All admin functionality requires authentication</description>
+            
+            <!-- Protect all URLs starting with /admin/ -->
+            <url-pattern>/admin/*</url-pattern>
+            
+            <!-- Protect all HTTP methods -->
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        
+        <!-- Only users with 'admin' role can access -->
+        <auth-constraint>
+            <description>Only admin users allowed</description>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- Login Configuration - Use HTTP BASIC Authentication -->
+    <login-config>
+        <!-- BASIC authentication sends username/password with each request -->
+        <!-- The browser shows a popup dialog for credentials -->
+        <auth-method>BASIC</auth-method>
+        
+        <!-- Realm name shown in the browser's login dialog -->
+        <realm-name>Admin Area - Login Required</realm-name>
+    </login-config>
+
+    <!-- Security Role Definition -->
+    <security-role>
+        <description>Administrator role for managing notes</description>
+        <role-name>admin</role-name>
+    </security-role>
+
+    <!-- ============================================== -->
+    <!-- SESSION CONFIGURATION                          -->
+    <!-- ============================================== -->
+    
+    <!-- Session timeout in minutes (30 minutes) -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+</web-app>
