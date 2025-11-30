@@ -1,17 +1,23 @@
-# Student Notes Sharing Application
+# Quick Notes - Study Smarter
 
 ## Overview
-A beginner-friendly Java web application using Servlets and JSP for student notes sharing. Students can download notes publicly from 4 predefined categories (Notes, Question Papers, Text Books, Guides), each with nested directory organization. Only the admin can upload or delete files. Uses Apache Tomcat as the web server with BASIC authentication for admin access.
+A beginner-friendly Java web application using Servlets and JSP for sharing study materials. Students can download notes publicly from 4 predefined categories (Notes, Question Papers, Text Books, Guides), each with nested directory organization. Only the admin can upload or delete files. Uses Apache Tomcat as the web server with BASIC authentication for admin access.
+
+## Branding
+- **Application Name:** Quick Notes
+- **Tagline:** Study Smarter, Learn Better
+- **Logo:** Neon-styled lightning bolt with notebook design
+- **Theme:** Dark gradient theme with modern glassmorphism effects
+- **Typography:** Poppins font family
 
 ## Design
-- **Theme:** Dark gradient theme inspired by backbencher.club
-- **Typography:** Poppins font family
-- **Features:** Hero section, 4 category buttons, nested folder navigation, glassmorphism effects
-- **Colors:** Purple/teal gradient background with colorful accent cards
+- **Colors:** Purple/teal gradient background (#0f0c29, #302b63, #24243e) with colorful accent cards
+- **Features:** Hero section with logo, 4 category buttons, nested folder navigation, glassmorphism effects
+- **Responsive:** Mobile-friendly responsive design
 
 ## Project Structure
 ```
-student-notes/
+quick-notes/
 ├── src/main/
 │   ├── java/com/notes/servlets/
 │   │   ├── ListNotesServlet.java       # Lists files/folders for public page
@@ -21,7 +27,8 @@ student-notes/
 │   │   ├── DeleteServlet.java          # Handles file/folder deletion
 │   │   └── CreateFolderServlet.java    # Creates new folders/categories
 │   └── webapp/
-│       ├── index.jsp                   # Public page with 4 category buttons
+│       ├── index.jsp                   # Public page with 4 category buttons and logo
+│       ├── logo.png                    # Quick Notes logo
 │       └── WEB-INF/
 │           ├── admin.jsp               # Admin dashboard with folder management
 │           └── web.xml                 # Security configuration
@@ -48,10 +55,10 @@ student-notes/
 ## Features
 
 ### 4 Main Categories
-- **Notes** - Class notes and lecture materials
-- **Question Papers** - Past papers and practice questions
-- **Text Books** - Reference textbooks and study guides
-- **Guides** - Preparation guides and study strategies
+- **📝 Notes** - Class notes and lecture materials
+- **❓ Question Papers** - Past papers and practice questions
+- **📖 Text Books** - Reference textbooks and study guides
+- **🎯 Guides** - Preparation guides and study strategies
 
 ### Nested Directory System Within Each Category
 - Create subdirectories (e.g., Notes/Mathematics/Calculus)
@@ -60,7 +67,7 @@ student-notes/
 - Full path sanitization preventing directory traversal attacks
 
 ### Public Features (No Login Required)
-- View 4 main category buttons on the home page
+- View 4 main category buttons with Quick Notes branding
 - Navigate through nested directories
 - Download any note file by clicking on it
 - Clean breadcrumb navigation showing current location

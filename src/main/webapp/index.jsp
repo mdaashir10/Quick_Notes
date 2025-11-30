@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <title>Backbencher Notes - Download Study Materials</title>
+    <title>Quick Notes - Study Smarter</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -434,9 +434,9 @@
 </head>
 <body>
     <div class="hero">
-        <span class="hero-badge">Free Study Materials</span>
-        <h1>DOWNLOAD NOTES &</h1>
-        <h2>QUESTION PAPERS</h2>
+        <img src="logo.png" alt="Quick Notes Logo" style="height: 120px; margin-bottom: 20px; border-radius: 20px;">
+        <h1>Quick Notes</h1>
+        <h2>Study Smarter, Learn Better</h2>
         <p>Access quality study materials organized by category</p>
     </div>
     
@@ -562,8 +562,8 @@
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Use</a>
         </div>
-        <div class="footer-brand">Student Notes</div>
-        <div class="footer-copyright">Copyright 2025 Student Notes. All rights reserved.</div>
+        <div class="footer-brand">Quick Notes</div>
+        <div class="footer-copyright">Copyright 2025 Quick Notes. All rights reserved.</div>
     </footer>
     
     <a href="/admin/dashboard" class="admin-link">🔐 Admin</a>

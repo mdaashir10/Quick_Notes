@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <title>Admin Dashboard - Student Notes</title>
+    <title>Admin Dashboard - Quick Notes</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -425,8 +425,13 @@
     <div class="container">
         <header>
             <div class="header-left">
-                <h1>Admin Dashboard</h1>
-                <p>Manage your study materials</p>
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                    <img src="../logo.png" alt="Quick Notes Logo" style="height: 50px; border-radius: 10px;">
+                    <div>
+                        <h1 style="margin: 0; font-size: 1.6em;">Quick Notes</h1>
+                        <p style="margin: 0; font-size: 0.8em; opacity: 0.7;">Admin Dashboard</p>
+                    </div>
+                </div>
             </div>
             <div class="header-right">
                 <div class="admin-badge">👤 <%= request.getAttribute("adminUser") %></div>
